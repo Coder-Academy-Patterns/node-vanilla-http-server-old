@@ -1,0 +1,10 @@
+GET http://localhost:7000/
+
+###
+GET http://localhost:7000/random
+
+###
+GET http://localhost:7000/movies
+
+###
+GET http://localhost:7000/does-not-exist
