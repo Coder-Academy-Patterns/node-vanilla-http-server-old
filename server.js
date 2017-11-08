@@ -1,5 +1,16 @@
 const HTTP = require('http')
-const { sendJSON } = require('./utils')
+const { sendJSON, readBodyAsJSON } = require('./utils')
+
+let movies = [
+  {
+    title: 'Forest Gump',
+    year: 1994
+  },
+  {
+    title: 'Back to the Future',
+    year: 1985
+  }
+]
 
 const server = HTTP.createServer((request, response) => {
   console.log('path', request.url)
@@ -11,19 +22,32 @@ const server = HTTP.createServer((request, response) => {
     response.end(`${Math.random()}`)
   }
   else if (path === '/movies') {
-    sendJSON(response, [
-      {
-        title: 'Forest Gump',
-        year: 1994
-      },
-      {
-        title: 'Back to the Future',
-        year: 1985
-      }
-    ])
+    if (request.method === 'POST') {
+      // Create
+      readBodyAsJSON(request, (error, newMovie) => {
+        // Error parsing JSON
+        if (error) {
+          sendJSON(response, {
+            "error": error.message
+          }, 400)
+        }
+        else {
+          movies.push(newMovie)
+          sendJSON(response, newMovie, 201)
+        }
+      })
+    }
+    else if (request.method === 'GET') {
+      // Read
+      sendJSON(response, movies)
+    }
+    else {
+      // Invalid method
+      response.writeHead(405) // 405 Method not allowed
+    }
   }
   else {
-    response.writeHead(404, {})
+    response.writeHead(404)
     response.end(`The route '${path}' does not exist`)
   }
 })

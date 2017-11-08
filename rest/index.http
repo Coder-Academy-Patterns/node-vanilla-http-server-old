@@ -7,4 +7,13 @@ GET http://localhost:7000/random
 GET http://localhost:7000/movies
 
 ###
+POST http://localhost:7000/movies
+Content-Type: application/json
+
+{
+  "title": "Babe",
+  "year": 1995
+}
+
+###
 GET http://localhost:7000/does-not-exist
