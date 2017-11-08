@@ -25,13 +25,14 @@ const server = HTTP.createServer((request, response) => {
     if (request.method === 'POST') {
       // Create
       readBodyAsJSON(request, (error, newMovie) => {
-        // Error parsing JSON
         if (error) {
+          // Error parsing JSON
           sendJSON(response, {
             "error": error.message
           }, 400)
         }
         else {
+          // Successfully got JSON
           movies.push(newMovie)
           sendJSON(response, newMovie, 201)
         }
