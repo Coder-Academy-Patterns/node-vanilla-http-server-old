@@ -1,4 +1,5 @@
 const HTTP = require('http')
+const { sendJSON } = require('./utils')
 
 const server = HTTP.createServer((request, response) => {
   console.log('path', request.url)
@@ -10,7 +11,7 @@ const server = HTTP.createServer((request, response) => {
     response.end(`${Math.random()}`)
   }
   else if (path === '/movies') {
-    const movies = [
+    sendJSON(response, [
       {
         title: 'Forest Gump',
         year: 1994
@@ -19,14 +20,7 @@ const server = HTTP.createServer((request, response) => {
         title: 'Back to the Future',
         year: 1985
       }
-    ]
-
-    response.writeHead(200, {
-      'Content-Type': 'application/json'
-    })
-
-    const moviesJSON = JSON.stringify(movies)
-    response.end(moviesJSON)
+    ])
   }
   else {
     response.writeHead(404, {})
